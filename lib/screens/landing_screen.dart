@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/screens/product_item.dart';
 import 'package:food_app/utils/constants.dart';
 
 import '../utils/widget_functions.dart';
@@ -61,10 +62,11 @@ class _LandingScreenState extends State<LandingScreen> {
       resizeToAvoidBottomInset: false,
       body: LayoutBuilder(builder: (context, constraints) {
         return Container(
-          child: Column(
-            children: [
-              Expanded(
-                  flex: 4,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: constraints.maxHeight * 0.40,
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
@@ -77,6 +79,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            addVerticalSpace(1),
                             Row(
                               children: [
                                 Container(
@@ -135,85 +138,105 @@ class _LandingScreenState extends State<LandingScreen> {
                         ),
                       ),
                     ],
-                  )),
-              Container(
-                width: constraints.maxHeight,
-                color: Colors.grey.shade200,
-                height: 400, //for demo only
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10.0,
-                    bottom: 10.0,
-                    // Not the other sides because of Scrolling
-                  ),
-                  child: Stack(
-                    clipBehavior: Clip
-                        .none, // it will shows the menu between green and white container
-                    children: [
-                      Column(
-                        children: [
-                          // some margin by estimate
-                          // for positioned Scrolling List
-                          addVerticalSpace(constraints.maxWidth * 0.35),
-                          Row(
-                            children: [
-                              Text(
-                                "Popular Foods",
-                                style: textTheme.headline5,
-                              ),
-                              Expanded(child: Center()),
-                              Text(
-                                "View All >",
-                                style: textTheme.subtitle2
-                                    ?.apply(color: COLOR_ORANGE),
-                              ),
-                              addHorizontalSpace(10)
-                            ],
-                          ),
-                        ],
-                      ),
-                      Positioned(
-                          top: -constraints.maxWidth * 0.15,
-                          child: Container(
-                            width: constraints.maxWidth,
-                            height: constraints.maxWidth * 0.35,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              physics: BouncingScrollPhysics(),
-                              children: CATEGORIES
-                                  .map((category) => Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 10.0),
-                                        width: constraints.maxWidth * 0.25,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Column(
-                                            children: [
-                                              Image.asset(
-                                                  "assets/images/${category['image']}"),
-                                              addVerticalSpace(10),
-                                              Text(
-                                                "${category['name']}",
-                                                style: textTheme.bodyText2
-                                                    ?.apply(color: COLOR_BLACK),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ))
-                                  .toList(),
-                            ),
-                          ))
-                    ],
                   ),
                 ),
-              )
-            ],
+                Container(
+                  width: constraints.maxWidth,
+                  color: Colors.grey.shade200,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 10.0,
+                      bottom: 10.0,
+                      // Not the other sides because of Scrolling
+                    ),
+                    child: Stack(
+                      clipBehavior: Clip
+                          .none, // it will shows the menu between green and white container
+                      children: [
+                        Column(
+                          children: [
+                            // some margin by estimate
+                            // for positioned Scrolling List
+                            addVerticalSpace(constraints.maxWidth * 0.35),
+                            Row(
+                              children: [
+                                Text(
+                                  "Popular Foods",
+                                  style: textTheme.headline5,
+                                ),
+                                Expanded(child: Center()),
+                                Text(
+                                  "View All >",
+                                  style: textTheme.subtitle2
+                                      ?.apply(color: COLOR_ORANGE),
+                                ),
+                                addHorizontalSpace(10)
+                              ],
+                            ),
+                            addVerticalSpace(10),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              child: Row(
+                                children: PRODUCT_DATA
+                                    .map((data) => InkWell(
+                                          onTap: () {
+                                            // Navigate to Product Page
+                                          },
+                                          child: ProductItem(
+                                            productDate: data,
+                                            width: constraints.maxWidth * 0.50,
+                                          ),
+                                        ))
+                                    .toList(),
+                              ),
+                            )
+                          ],
+                        ),
+                        Positioned(
+                            top: -constraints.maxWidth * 0.15,
+                            child: Container(
+                              width: constraints.maxWidth,
+                              height: constraints.maxWidth * 0.35,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                physics: BouncingScrollPhysics(),
+                                children: CATEGORIES
+                                    .map((category) => Container(
+                                          margin: const EdgeInsets.only(
+                                              right: 10.0),
+                                          width: constraints.maxWidth * 0.25,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Column(
+                                              children: [
+                                                Image.asset(
+                                                    "assets/images/${category['image']}"),
+                                                addVerticalSpace(10),
+                                                Text(
+                                                  "${category['name']}",
+                                                  style: textTheme.bodyText2
+                                                      ?.apply(
+                                                          color: COLOR_BLACK),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ))
+                                    .toList(),
+                              ),
+                            ))
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         );
       }),
