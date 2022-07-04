@@ -140,6 +140,78 @@ class _LandingScreenState extends State<LandingScreen> {
                 width: constraints.maxHeight,
                 color: Colors.grey.shade200,
                 height: 400, //for demo only
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10.0,
+                    bottom: 10.0,
+                    // Not the other sides because of Scrolling
+                  ),
+                  child: Stack(
+                    clipBehavior: Clip
+                        .none, // it will shows the menu between green and white container
+                    children: [
+                      Column(
+                        children: [
+                          // some margin by estimate
+                          // for positioned Scrolling List
+                          addVerticalSpace(constraints.maxWidth * 0.35),
+                          Row(
+                            children: [
+                              Text(
+                                "Popular Foods",
+                                style: textTheme.headline5,
+                              ),
+                              Expanded(child: Center()),
+                              Text(
+                                "View All >",
+                                style: textTheme.subtitle2
+                                    ?.apply(color: COLOR_ORANGE),
+                              ),
+                              addHorizontalSpace(10)
+                            ],
+                          ),
+                        ],
+                      ),
+                      Positioned(
+                          top: -constraints.maxWidth * 0.15,
+                          child: Container(
+                            width: constraints.maxWidth,
+                            height: constraints.maxWidth * 0.35,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              children: CATEGORIES
+                                  .map((category) => Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 10.0),
+                                        width: constraints.maxWidth * 0.25,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Column(
+                                            children: [
+                                              Image.asset(
+                                                  "assets/images/${category['image']}"),
+                                              addVerticalSpace(10),
+                                              Text(
+                                                "${category['name']}",
+                                                style: textTheme.bodyText2
+                                                    ?.apply(color: COLOR_BLACK),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                          ))
+                    ],
+                  ),
+                ),
               )
             ],
           ),
